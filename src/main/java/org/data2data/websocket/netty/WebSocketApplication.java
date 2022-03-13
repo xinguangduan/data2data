@@ -1,11 +1,11 @@
-package io.springboot.netty;
+package org.data2data.websocket.netty;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class NettyApplication {
+public class WebSocketApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(NettyApplication.class, args);
+		SpringApplication.run(WebSocketApplication.class, args);
 	}
 }

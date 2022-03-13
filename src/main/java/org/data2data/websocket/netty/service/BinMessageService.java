@@ -1,4 +1,4 @@
-package io.springboot.netty.service;
+package org.data2data.websocket.netty.service;
 
 import io.netty.buffer.ByteBuf;
 import lombok.extern.slf4j.Slf4j;

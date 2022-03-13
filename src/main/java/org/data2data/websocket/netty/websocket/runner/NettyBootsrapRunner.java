@@ -1,7 +1,8 @@
-package io.springboot.netty.websocket.runner;
+package org.data2data.websocket.netty.websocket.runner;
 
 import java.net.InetSocketAddress;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -34,17 +35,14 @@ import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketServerCompressionHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
-import io.springboot.netty.websocket.handler.WebsocketMessageHandler;
+import org.data2data.websocket.netty.websocket.handler.WebsocketMessageHandler;
 
 /**
  * 初始化Netty服务
- *
- * @author Administrator
  */
 @Component
+@Slf4j
 public class NettyBootsrapRunner implements ApplicationRunner, ApplicationListener<ContextClosedEvent>, ApplicationContextAware {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(NettyBootsrapRunner.class);
 
     @Value("${netty.websocket.port}")
     private int port;
@@ -109,7 +107,7 @@ public class NettyBootsrapRunner implements ApplicationRunner, ApplicationListen
             });
             Channel channel = serverBootstrap.bind().sync().channel();
             this.serverChannel = channel;
-            LOGGER.info("websocket 服务启动，ip={},port={}", this.ip, this.port);
+            log.info("websocket 服务启动，ip={},port={}", this.ip, this.port);
             channel.closeFuture().sync();
         } finally {
             bossGroup.shutdownGracefully();
@@ -121,6 +119,6 @@ public class NettyBootsrapRunner implements ApplicationRunner, ApplicationListen
         if (this.serverChannel != null) {
             this.serverChannel.close();
         }
-        LOGGER.info("websocket 服务停止");
+        log.info("websocket 服务停止");
     }
 }

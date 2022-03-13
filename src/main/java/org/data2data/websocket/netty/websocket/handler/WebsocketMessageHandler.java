@@ -1,11 +1,11 @@
-package io.springboot.netty.websocket.handler;
+package org.data2data.websocket.netty.websocket.handler;
 
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 
-import io.springboot.netty.constant.Constant;
-import io.springboot.netty.service.BinMessageService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.data2data.websocket.netty.constant.Constant;
+import org.data2data.websocket.netty.service.BinMessageService;
+import lombok.extern.slf4j.Slf4j;
+import org.data2data.websocket.netty.service.TextMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,19 +16,15 @@ import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketCloseStatus;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
-import io.springboot.netty.service.DiscardService;
 
-/**
- * @author Administrator
- */
+
 @Sharable
 @Component
+@Slf4j
 public class WebsocketMessageHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebsocketMessageHandler.class);
-
     @Autowired
-    DiscardService discardService;
+    TextMessageService textMessageService;
     @Autowired
     BinMessageService binMessageService;
 
@@ -37,7 +33,7 @@ public class WebsocketMessageHandler extends SimpleChannelInboundHandler<WebSock
         if (msg instanceof TextWebSocketFrame) {
             TextWebSocketFrame textWebSocketFrame = (TextWebSocketFrame) msg;
             // 业务层处理数据
-            this.discardService.discard(textWebSocketFrame.text());
+            this.textMessageService.handle(textWebSocketFrame.text());
             // 响应客户端
             ctx.channel().writeAndFlush(new TextWebSocketFrame("我收到了你的消息：" + System.currentTimeMillis()));
         } else if (msg instanceof BinaryWebSocketFrame) {
@@ -55,12 +51,12 @@ public class WebsocketMessageHandler extends SimpleChannelInboundHandler<WebSock
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
-        LOGGER.info("链接断开：{}", ctx.channel().remoteAddress());
+        log.info("链接断开：{}", ctx.channel().remoteAddress());
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
-        LOGGER.info("链接创建：{}", ctx.channel().remoteAddress());
+        log.info("链接创建：{}", ctx.channel().remoteAddress());
     }
 }

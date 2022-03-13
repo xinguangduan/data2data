@@ -3,7 +3,7 @@ server:
 
 logging:
     level:
-      root: INFO
+      root: DEBUG
 
 management:
   endpoints: 
@@ -24,5 +24,5 @@ netty:
     # 消息帧最大体积
     max-frame-size: 10240
     # URI路径
-    path: /channel
+    path: /ws/channel
 

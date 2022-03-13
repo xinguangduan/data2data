@@ -5,13 +5,12 @@
 		<title>Websocket</title>
 	</head>
 	<body>
-	
 	</body>
 	<span id="show"><b>websocket test</b>
 	</span>
 	<script type="text/javascript">
 		;(function(){
-			const websocket = new WebSocket('ws://localhost:1024/channel');
+			const websocket = new WebSocket('ws://localhost:1024/ws/channel');
 			websocket.onmessage = e => {
 				console.log('收到消息:', e.data);
 				document.getElementById('show').innerHtml='收到消息'+e.data;
